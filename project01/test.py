@@ -19,6 +19,8 @@ results = api.search(query)
 
 print(f"총 {results['total']}개의 호스트가 발견되었습니다.")
 
+collection.create_index([("ip", 1)], unique=True) #중복방지
+
 # 검색된 각 호스트에 대해 반복하며 MongoDB에 데이터 삽입
 for host in results['matches']:
     data = {
@@ -28,7 +30,7 @@ for host in results['matches']:
         "location": host['location']['country_name'],
         "hostnames": ', '.join(host['hostnames']) if host['hostnames'] else 'N/A'
     }
-    
+    collection.create_index([("ip", 1)], unique=True) #중복방지
     # insert_one 함수를 반복문 안에서 호출하여 각 호스트를 개별 문서로 저장
     collection.insert_one(data)
     print(f"- IP {data['ip']} 데이터 저장 완료")
