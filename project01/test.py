@@ -19,7 +19,10 @@ ports = [7547, 9000, 8009, 8008, 8443]
 for port in ports:
     # 이전 total 값 불러오기
     total_doc = totals_db.find_one({"port": port})
-    previous_total = total_doc['total'] if total_doc else 0
+    if total_doc:
+        previous_total = total_doc['total']
+    else:
+        previous_total = 0
 
     # 현재 검색 결과
     results = api.search(f"country:KR port:{port}")
