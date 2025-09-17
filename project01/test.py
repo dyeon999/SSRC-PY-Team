@@ -62,7 +62,6 @@ for port in ports: # ports 리스트의 각 포트 번호를 반복
         saved_count += 1
         print(f"- IP {data['ip']} 데이터 저장 완료")
         
-    
     # 4. 증감 계산
     # 이전 총 개수와 현재 총 개수를 비교하여 증감량 계산
     diff = current_total - previous_total
