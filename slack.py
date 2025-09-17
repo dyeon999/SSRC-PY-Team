@@ -6,7 +6,7 @@ import os
 
 load_dotenv()
 
-# mongodb 연결
+# mongodb 연결하기
 client = MongoClient('mongodb://localhost:27017/')
 db = client['school_db']
 collection = db['students']
