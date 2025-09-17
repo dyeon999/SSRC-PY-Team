@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>Shodan 한국 상위 10개 포트</title>
+</head>
+<body>
+  <h1>상위 10개 포트 (KR)</h1>
+  <a href="/snapshot/html">스냅샷 즉시 수집</a>
+
+  {% if doc %}
+    <p><b>수집 시각:</b> {{ doc.created_at }}</p>
+    <table border="1" cellpadding="6">
+      <tr><th>Port</th><th>Count</th><th>Δ 변화</th></tr>
+      {% for port, count in doc.ports.items() %}
+        <tr>
+          <td>{{ port }}</td>
+          <td>{{ count }}</td>
+          <td>
+            {% if inc.get(port) %}+{{ inc.get(port) }}
+            {% elif dec.get(port) %}-{{ dec.get(port) }}
+            {% else %}0{% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p>데이터 없음. 스냅샷을 수집하세요.</p>
+  {% endif %}
+</body>
+</html>
