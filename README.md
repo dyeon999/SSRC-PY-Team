@@ -1,3 +1,4 @@
+
 ## This is SSRC 27th Python Team Project
 
 1. shodan api를 통해 한국에서 열린 포트 정보를 검색
@@ -12,3 +13,4 @@
 
 - 김도연, 김문호, 안은선
     - 자동화, 알림 (slack, 이메일)
+
