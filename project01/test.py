@@ -2,7 +2,7 @@ import shodan
 from pymongo import MongoClient
 
 # API 키 초기화
-SHODAN_API_KEY = 'nu9Gn9RlRJJIUtgjX4QYs22QGVUnq82s'
+SHODAN_API_KEY = 'f1dhVxRDYX74VO71TO8rXLYAfihEJXkl'
 api = shodan.Shodan(SHODAN_API_KEY)
 
 # MongoDB 연결
@@ -12,7 +12,7 @@ db = client['shodan_db'] # 'shodan_db' 데이터베이스에 접근
 totals_db = db['totals'] # 포트별 총 개수를 기록할 'totals' 컬렉션
 
 # 검색할 포트 목록 top 5
-ports = [7547]   #[7547, 9000, 8009, 8008, 8443]  토큰을 너무 많이 사용할까봐 1개로 줄임
+ports = [7547, 9000, 8009, 8008, 8443]
 
 # Shodan 검색 및 MongoDB 저장 로직
 for port in ports: # ports 리스트의 각 포트 번호를 반복
@@ -26,20 +26,18 @@ for port in ports: # ports 리스트의 각 포트 번호를 반복
 
     # 2. 현재 검색 결과
     # Shodan API를 호출하여 현재 시점의 총 호스트 수를 가져옴
-    results = api.search(f"country:KR port:{port}") 
+    query = f"country:KR port:{port}"
+    results = api.search(query) 
     current_total = results['total'] # 현재 검색된 호스트의 총 개수
 
    
     # 3. 포트별 컬렉션에 개별 호스트 정보 저장
     collection = db[f'port_{port}'] # 예: port_7547 컬렉션에 접근
     print(f"\n==== 포트 {port} 검색 및 저장 시작 ====")
-
-    # 검색 쿼리 (이미 위에서 실행했으므로 불필요)
-    query = f"country:KR port:{port}"
+    
     print(f"쿼리: {query}")
     
-    # 여기서 API를 다시 호출하여 불필요한 크레딧 소모가 발생함
-    results = api.search(query) 
+     
     print(f"총 {results['total']}개의 호스트가 발견되었습니다.")
     
     saved_count = 0
