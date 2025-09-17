@@ -10,10 +10,6 @@ collection = db['KR']
 SHODAN_API_KEY = 'nu9Gn9RlRJJIUtgjX4QYs22QGVUnq82s'
 api = shodan.Shodan(SHODAN_API_KEY)
 
-query = 'country:"KR"' # 쿼리값
-
-results = api.search(query)
-
 # 데이터 검색 및 저장
 def save_db(query):
     results = api.search(query)
@@ -23,8 +19,8 @@ def save_db(query):
             ip = result["ip_str"]
             port = result["port"]
 
-            print(f"IP: {ip}")
-            print(f"PORT: {port}")
+            # print(f"IP: {ip}")
+            # print(f"PORT: {port}")
 
             collection.update_one(
             {"IP": ip}, # IP
@@ -40,12 +36,12 @@ def detect_port(query):
     results = api.search(query)
 
     try:
-        for result in results['matches'][:50]:
+        for result in results['matches'][:51]:
             ip = result["ip_str"]
             port = result["port"]
 
-            print(f"IP: {ip}")
-            print(f"PORT: {port}")
+            # print(f"IP: {ip}")
+            # print(f"PORT: {port}")
 
         a = collection.find_one(
             {"IP": ip},
@@ -57,4 +53,10 @@ def detect_port(query):
 
     except Exception as e:
         print(f"오류: {e}")
+
+
+if __name__ == "__main__":
+    query = 'country:"KR"' # 쿼리값
+    save_db(query)
+    detect_port(query)
 
