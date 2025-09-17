@@ -8,7 +8,7 @@ api = shodan.Shodan(SHODAN_API_KEY)
 # MongoDB 연결
 client = MongoClient('mongodb://localhost:27017/') # MongoDB 서버에 연결
 db = client['shodan_db'] # 'shodan_db' 데이터베이스에 접근
-totals_db = db['totals'] # 포트별 총 개수를 기록할 'totals' 컬렉션
+totals_db = db['totals'] # 포트별 총 개수를 기록할 'totals'
 
 #Shodan에서 country:KR 기준으로 TOP PORTS 5개 가져오기
 stats = api.count("country:KR", facets=["port:5"])
