@@ -1,0 +1,10 @@
+<head>
+    <form action="/send" method="POST">
+  <button type="submit">보내기</button>
+</form>
+</head>
+<ul>
+  {% for log in logs %}
+    <li>{{ log }}</li>
+  {% endfor %}
+</ul>
