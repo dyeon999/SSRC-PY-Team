@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Shodan 알림 이메일</title>
+  </head>
+  <body>
+    <h1>Shodan 알림 이메일 발송</h1>
+    <form action="/send_email" method="post">
+      <label for="recipient">수신자 이메일:</label>
+      <input type="email" id="recipient" name="recipient" required />
+      <br /><br />
+      <button type="submit">보내기</button>
+    </form>
+  </body>
+</html>
