@@ -8,12 +8,12 @@ api = shodan.Shodan(SHODAN_API_KEY)  # Shodan API 객체 생성
 # MongoDB 연결
 client = MongoClient('mongodb://localhost:27017/')  # MongoDB 서버 연결
 db = client['shodan_db']  # 'shodan_db' 데이터베이스
-totals_db = db['totals']  # 포트별 총 개수를 기록할 'totals'
+totals_collection = db['totals']  # 포트별 총 개수를 기록할 'totals'
 
 
 # MongoDB totals 컬렉션에서 해당 포트의 이전 total 값 가져오기
 def get_previous_total(port):
-    total_doc = totals_db.find_one({"port": port})  # 해당 포트의 문서 검색
+    total_doc = totals_collection.find_one({"port": port})  # 해당 포트의 문서 검색
     
     if total_doc:          # 문서가 존재하면
         previous_total = total_doc['total']  # total 값 가져오기
@@ -25,7 +25,7 @@ def get_previous_total(port):
 
 # MongoDB totals 컬렉션에 현재 total과 증감(diff) 업데이트
 def update_totals(port, current_total, diff):
-    totals_db.update_one(
+    totals_collection.update_one(
         {"port": port},
         {"$set": {"total": current_total, "diff": diff}},
         upsert=True  # 없으면 새로 생성
@@ -59,7 +59,7 @@ def save_hosts_to_mongo(port, hosts):
 def main():
     ports = []
     # Shodan에서 한국 기준 상위 5개 포트 가져오기
-    stats = api.count("country:KR", facets=["port:5"])
+    stats = api.count("country:KR", facets=["port:5"])  #facets옵션은 쿼리 조건에서 자주 등장하는 값들을 집계하여 반환
     for facet in stats['facets']['port']:
         ports.append(facet['value'])  # 포트 번호 추출하여 리스트에 추가
 
