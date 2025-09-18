@@ -21,23 +21,23 @@ ports = {80 : 0,
          22: 0,
           70: 0}
 
-def save(country, port):
+def save(port):
     collection = db[f'{port}']
+    
+    query = f'country:"KR" port:"{port}"'
 
-    query = f'country:"{country}" port:"{port}"'
     results = api.search(query)
 
-    # query_total = ports[port]
-    # 혹은
-    # query_total = collection.find()
+    query_total = ports[port]
+    # 혹은 테이블 만들고 
+    # query_total = collection.find() 
 
     new_total = results['total']
     
     diff = abs(query_total - new_total)
 
     if query_total == 0:
-        print(f"국가 코드: {country_code} \
-               열린 포트 {port}번 {new_total}개 감지")
+        print(f"새로운 포트 {port}번 {diff}개 감지")
     elif query_total > new_total:
         print(f"포트 {port}번 {diff}개 닫힘 감지")
     elif query_total < new_total:
@@ -45,20 +45,16 @@ def save(country, port):
     
     ports[port] = new_total # 쿼리 개수 저장
     
-    # print(results['matches'][0].keys())
-
     for result in results['matches']:
         ip = result["ip_str"]
         port = result["port"]
         country_code = result["location"]["country_code"]
         domain = result["domains"]
-        # pprint(result)
 
         collection.update_one(
             {"IP": ip}, # IP
             {"$set": {
                 "PORTS": port,
-                "country": country_code,
                 "domain": domain
                 }},
             upsert=True # 만약 IP 이름 가진 데이터 없을 경우 추가
@@ -66,17 +62,9 @@ def save(country, port):
         # ip port 국가코드 domain
     
 if __name__ == '__main__':
-    cnt = 0
-    while True:
-        for port in ports.keys():
-            if cnt == 0:
-                save('KR',port)
-            elif cnt == 1:
-                save('US',port)
-        cnt += 1
-        time.sleep(60)
-        if cnt == 2:
-            break
+    for port in ports.keys():
+        save(port)
+
 
 
 
